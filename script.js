@@ -19,6 +19,8 @@ const questions = [
 let currentQuestionIndex = 0;
 let score = 0;
 
+const correctPassword = "1234";
+
 function loadQuestion() {
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
@@ -39,6 +41,9 @@ function selectOption(selectedOption) {
     const currentQuestion = questions[currentQuestionIndex];
     if (selectedOption === currentQuestion.answer) {
         score++;
+        document.getElementById('next-button').disabled = false;
+    } else {
+        document.getElementById('password-modal').style.display = 'flex';
     }
     document.querySelectorAll('#options button').forEach(button => {
         button.disabled = true;
@@ -48,7 +53,6 @@ function selectOption(selectedOption) {
             button.style.backgroundColor = 'red';
         }
     });
-    document.getElementById('next-button').disabled = false;
 }
 
 function nextQuestion() {
@@ -65,6 +69,20 @@ function showResult() {
     const quizContainer = document.getElementById('quiz-container');
     quizContainer.innerHTML = `<h2>Você acertou ${score} de ${questions.length} perguntas!</h2>`;
     document.getElementById('next-button').style.display = 'none';
+}
+
+function closeModal() {
+    document.getElementById('password-modal').style.display = 'none';
+}
+
+function verifyPassword() {
+    const passwordInput = document.getElementById('password-input').value;
+    if (passwordInput === correctPassword) {
+        closeModal();
+        document.getElementById('next-button').disabled = false;
+    } else {
+        alert("Senha incorreta. Tente novamente.");
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
